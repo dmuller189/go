@@ -7,18 +7,26 @@ option go_package = "example.com/helloRPC/chat";
 package chat;
 
 // The greeting service definition.
-service Greeter {
+service MyFirstService {
   // Sends a greeting
   rpc SayHello (HelloRequest) returns (HelloReply) {}
   rpc SayHelloAgain (HelloRequest) returns (HelloReply) {}
+  rpc Other (DataReq) returns (DataRes) {}
 }
 
-// The request message containing the user's name.
 message HelloRequest {
   string name = 1;
 }
 
-// The response message containing the greetings
 message HelloReply {
   string message = 1;
+}
+
+
+message DataReq {
+  int32 amount = 1;
+}
+
+message DataRes {
+  int32 amount = 1;
 }

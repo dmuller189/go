@@ -1,9 +1,10 @@
 package main
 
 import (
-	"log"
 	"context"
+	"log"
 	"time"
+
 	"google.golang.org/grpc"
 
 	pb "example.com/helloRPC/chat"
@@ -22,7 +23,7 @@ func main() {
 	}
 	defer conn.Close()
 
-	c := pb.NewGreeterClient(conn)
+	c := pb.NewMyFirstServiceClient(conn)
 
 	name := defaultName
 
@@ -35,10 +36,16 @@ func main() {
 	}
 	log.Printf("Greeting: %s", r.GetMessage())
 
-	r, err = c.SayHelloAgain(ctx, &pb.HelloRequest{Name: name})
-	if err != nil {
-		log.Fatalf("could not greet: %v", err)
+	n, err2 := c.Other(ctx, &pb.DataReq{Amount: 21})
+	if err2 != nil {
+		log.Fatalf("could not greet: %v", n)
 	}
-	log.Printf("Greeting: %s", r.GetMessage())
+	log.Printf("Amount: %d", n.Amount)
+
+	// r, err = c.SayHelloAgain(ctx, &pb.HelloRequest{Name: name})
+	// if err != nil {
+	// 	log.Fatalf("could not greet: %v", err)
+	// }
+	// log.Printf("Greeting: %s", r.GetMessage())
 
 }

@@ -10,7 +10,7 @@ import (
 )
 
 type server struct {
-	pb.UnimplementedGreeterServer
+	pb.UnimplementedMyFirstServiceServer
 }
 
 const (
@@ -23,8 +23,13 @@ func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloRe
 }
 
 func (s *server) SayHelloAgain(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
-	log.Printf("Received: %v", in.GetName())
+	log.Printf("Received (again): %v", in.GetName())
 	return &pb.HelloReply{Message: "Hello " + in.GetName()}, nil
+}
+
+func (s *server) Other(ctx context.Context, in *pb.DataReq) (*pb.DataRes, error) {
+	log.Printf("Received (other): %v", "ggg")
+	return &pb.DataRes{Amount: 4}, nil
 }
 
 func main() {
@@ -33,8 +38,11 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
+
 	s := grpc.NewServer()
-	pb.RegisterGreeterServer(s, &server{})
+
+	pb.RegisterMyFirstServiceServer(s, &server{})
+
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
